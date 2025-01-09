@@ -4,17 +4,19 @@ import interfaces.ITask;
 
 public class Task implements ITask {
     private int id;
+    private int listId;
     private String name;
     private String description;
     private boolean done;
 
     public Task() {}
 
-    public Task(int id, String name, String description, boolean done) {
+    public Task(int id, int listId, String name, String description) {
         this.id = id;
+        this.listId = listId;
         this.name = name;
         this.description = description;
-        this.done = done;
+        this.done = false;
     }
 
 
@@ -58,5 +60,11 @@ public class Task implements ITask {
     @Override
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public String toString()
+    {
+        return this.id + "\n" + this.name + "\n" + this.description + "\n" + this.done + "\n" + this.listId + "\n";
+
     }
 }

@@ -1,10 +1,16 @@
 package models;
+import interfaces.IApp;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.IOException;
 
 
 
-public class App {
+public class App implements IApp {
 
     ArrayList<List> lists;
     int currentScreen;
@@ -20,7 +26,7 @@ public class App {
         currentListId = 0;
         in = new Scanner(System.in);
     }
-
+    @Override
     public void startApp()
     {
 
@@ -55,13 +61,21 @@ public class App {
     {
         System.out.println("1. Import lists from file");
         System.out.println("2. Continue without importing");
+        System.out.println("0. Quit the app");
 
-        input = this.in.nextInt();
-        if(input == 1)
+        this.input = this.in.nextInt();
+
+        switch(this.input)
         {
-            this.importFromFile();
+            case 1:
+                this.importFromFile();
+                break;
+            case 2:
+                this.currentScreen++;
+                break;
+            default:
+                break;
         }
-        this.currentScreen++;
     }
 
     private void runScreen1() {
@@ -242,36 +256,100 @@ public class App {
 
 
     public void createList(String name) {
-
+        int id = this.lists.size() + 1;
+        List list = new List(id, name);
+        this.lists.add(list);
     }
 
     public void deleteList(int id) {
-
+        this.lists.remove(id - 1);
+        this.updateListIds();
     }
 
-    public void showAllLists()
-    {
-
-    }
-
-    public void showList(int listId)
-    {
-
-    }
 
     public void closeApp()
     {
-
+        this.exportToFile();
     }
 
     public void exportToFile()
     {
 
+        try {
+            FileWriter fWriter = new FileWriter("export.txt");
+            fWriter.write(this.lists.size());
+            for(List list : this.lists)
+            {
+                fWriter.write(list.toString());
+            }
+            fWriter.write(this.lists.size());
+            for(List list : this.lists)
+            {
+                for(Task task : list.getTasks())
+                {
+                    fWriter.write(task.toString());
+                }
+            }
+        }
+        catch (IOException e)
+        {
+
+            // Print the exception
+            System.out.print(e.getMessage());
+        }
     }
 
     public void importFromFile()
     {
+        try
+        {
+            File file = new File("export.txt");
 
+            Scanner sc = new Scanner(file);
+
+            int numOfLists = sc.nextInt();
+            int listId;
+            int taskId;
+            boolean done;
+            String description;
+            String taskName;
+            String listName;
+
+            for(int i = 0; i < numOfLists; i++)
+            {
+                listId = sc.nextInt();
+                listName = sc.nextLine();
+                this.createList(listName);
+
+            }
+            int numOfTasks = sc.nextInt();
+
+            for(int i = 0; i < numOfTasks; i++)
+            {
+                taskId = sc.nextInt();
+                taskName = sc.nextLine();
+                description = sc.nextLine();
+                done = sc.nextBoolean();
+                listId = sc.nextInt();
+
+                this.lists.get(listId - 1).createTask(taskName, description);
+            }
+
+
+        }
+        catch (IOException e)
+        {
+
+            // Print the exception
+            System.out.print(e.getMessage());
+        }
     }
 
+    private void updateListIds()
+    {
+        for(List list : this.lists)
+        {
+            list.setId(this.lists.indexOf(list) + 1);
+        }
+    }
 }
