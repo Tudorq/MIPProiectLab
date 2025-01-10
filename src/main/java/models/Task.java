@@ -22,6 +22,11 @@ public class Task implements ITask {
 
 
 
+    public int getListId()
+    {
+        return listId;
+    }
+
     @Override
     public int getId() {
         return id;

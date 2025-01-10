@@ -41,7 +41,7 @@ public class List implements IList {
 
     public void createTask(String name, String description)
     {
-        int id = this.tasks.size();
+        int id = this.tasks.size() + 1;
 
         Task task = new Task(id, this.id, name, description);
         this.tasks.add(task);
