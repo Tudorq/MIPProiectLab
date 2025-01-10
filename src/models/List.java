@@ -12,6 +12,7 @@ public class List implements IList {
     public List(int id, String name) {
         this.id = id;
         this.name = name;
+        this.tasks = new ArrayList<>();
     }
 
     public int getId() {
@@ -46,6 +47,15 @@ public class List implements IList {
         this.tasks.add(task);
     }
 
+    public void addTask(String name, String description, boolean status)
+    {
+        int id = this.tasks.size();
+
+        Task task = new Task(id, this.id, name, description);
+        task.setDone(status);
+        this.tasks.add(task);
+    }
+
     public void deleteTask(int id)
     {
         this.tasks.remove(id - 1);
@@ -62,7 +72,7 @@ public class List implements IList {
 
     public String toString()
     {
-        return this.id + "\n" + this.name + "\n";
+        return this.id + "!" + this.name + "!";
 
     }
 

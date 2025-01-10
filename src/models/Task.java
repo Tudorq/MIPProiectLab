@@ -64,7 +64,7 @@ public class Task implements ITask {
 
     public String toString()
     {
-        return this.id + "\n" + this.name + "\n" + this.description + "\n" + this.done + "\n" + this.listId + "\n";
+        return this.id + "!" + this.name + "!" + this.description + "!" + this.done + "!" + this.listId + "!";
 
     }
 }

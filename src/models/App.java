@@ -64,11 +64,14 @@ public class App implements IApp {
         System.out.println("0. Quit the app");
 
         this.input = this.in.nextInt();
+        this.in.nextLine();
 
         switch(this.input)
         {
             case 1:
                 this.importFromFile();
+                this.currentScreen++;
+                System.out.println("Sdaw");
                 break;
             case 2:
                 this.currentScreen++;
@@ -92,12 +95,13 @@ public class App implements IApp {
                 System.out.println("0. Quit the app");
 
                 this.input = this.in.nextInt();
+                this.in.nextLine();
 
                 switch(this.input)
                 {
                     case 1:
                         System.out.println("Enter the list name");
-                        name = in.nextLine();
+                        name = this.in.nextLine();
                         this.createList(name);
                         break;
                     case 2:
@@ -125,12 +129,14 @@ public class App implements IApp {
                 System.out.println("0. Quit the app");
 
                 this.input = this.in.nextInt();
+                this.in.nextLine();
 
                 switch(this.input)
                 {
                     case 1:
                         System.out.println("Enter the list id");
-                        this.currentListId = in.nextInt();
+                        this.currentListId = this.in.nextInt();
+                        this.in.nextLine();
                         this.currentScreen++;
                         break;
                     case 2:
@@ -140,7 +146,8 @@ public class App implements IApp {
                         break;
                     case 3:
                         System.out.println("Enter the list id");
-                        id = in.nextInt();
+                        id = this.in.nextInt();
+                        this.in.nextLine();
                         this.deleteList(id);
                         break;
                     case 4:
@@ -174,6 +181,7 @@ public class App implements IApp {
                 System.out.println("0. Quit the app");
 
                 this.input = this.in.nextInt();
+                this.in.nextLine();
 
                 switch(this.input)
                 {
@@ -221,6 +229,7 @@ public class App implements IApp {
                 System.out.println("0. Quit the app");
 
                 this.input = this.in.nextInt();
+                this.in.nextLine();
 
                 switch(this.input)
                 {
@@ -234,11 +243,13 @@ public class App implements IApp {
                     case 2:
                         System.out.println("Enter the task id");
                         id = in.nextInt();
+                        this.in.nextLine();
                         this.lists.get(this.currentListId - 1).deleteTask(id);
                         break;
                     case 3:
                         System.out.println("Enter the task id");
                         id = in.nextInt();
+                        this.in.nextLine();
                         this.lists.get(this.currentListId - 1).getTask(id - 1).setDone(true);
                         break;
                     case 4:
@@ -275,14 +286,17 @@ public class App implements IApp {
     public void exportToFile()
     {
 
-        try {
-            FileWriter fWriter = new FileWriter("export.txt");
-            fWriter.write(this.lists.size());
+        int numOfTasks = 0;
+
+        try(FileWriter fWriter = new FileWriter("export.txt")) {
+
+            fWriter.write(this.lists.size() + "!");
             for(List list : this.lists)
             {
+                numOfTasks+= list.getTasks().size();
                 fWriter.write(list.toString());
             }
-            fWriter.write(this.lists.size());
+            fWriter.write(numOfTasks + "!");
             for(List list : this.lists)
             {
                 for(Task task : list.getTasks())
@@ -306,8 +320,12 @@ public class App implements IApp {
             File file = new File("export.txt");
 
             Scanner sc = new Scanner(file);
+            sc.useDelimiter("!");
 
             int numOfLists = sc.nextInt();
+            System.out.println(numOfLists);
+            System.out.println("test");
+            System.out.println("testint");
             int listId;
             int taskId;
             boolean done;
@@ -315,26 +333,38 @@ public class App implements IApp {
             String taskName;
             String listName;
 
+            System.out.println("test1");
             for(int i = 0; i < numOfLists; i++)
             {
                 listId = sc.nextInt();
-                listName = sc.nextLine();
+                listName = sc.next();
                 this.createList(listName);
 
             }
+            System.out.println("test2");
             int numOfTasks = sc.nextInt();
-
+            System.out.println(numOfTasks);
             for(int i = 0; i < numOfTasks; i++)
             {
                 taskId = sc.nextInt();
-                taskName = sc.nextLine();
-                description = sc.nextLine();
+                System.out.println("test");
+
+                taskName = sc.next();
+                System.out.println("test");
+
+                description = sc.next();
+                System.out.println("test");
+
                 done = sc.nextBoolean();
+                System.out.println("test");
+
                 listId = sc.nextInt();
+                System.out.println("test");
 
-                this.lists.get(listId - 1).createTask(taskName, description);
+
+                this.lists.get(listId - 1).addTask(taskName, description, done);
             }
-
+            System.out.println("test4");
 
         }
         catch (IOException e)
