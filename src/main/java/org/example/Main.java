@@ -1,3 +1,5 @@
+package org.example;
+
 import interfaces.IApp;
 import models.App;
 
